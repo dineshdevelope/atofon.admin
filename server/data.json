@@ -1,0 +1,44 @@
+{
+  "name": "Dinesh S",
+  "age": 27,
+  "email": "dineshinmecheng@gmail.com",
+  "qualification": "Mechanical Engineering",
+  "role": "developer",
+  "department": "Development",
+  "joiningDate": "24-03-2025",
+  "experience": 5,
+  "isActive": true,
+  "skills": ["Frontend", "Backend", "Fullstack", "DevOps"],
+  "address": {
+    "street": "43 Ganthi Nagar",
+    "landmark": "Near Arts College",
+    "area": "Laddivaddi",
+    "district": "Namakkal",
+    "state": "TamilNadu",
+    "pincode": "637002"
+  },
+  "profilePicture": "https://example.com/profile.jpg",
+  "resumeImage": "https://example.com/resume.pdf",
+  "certificateImage": "https://example.com/certificate.pdf",
+  "isStayingCompanyRoom": true,
+  "isUsingCompanySystem": true,
+  "systemNumber": "SYS123456",
+  "phoneNumber": 1234567890,
+  "alternatePhoneNumber": 3216540987,
+  "emergencyContact": {
+    "name": "Kumar",
+    "relationship": "Brother",
+    "phoneNumber": "9677499844",
+    "alternatePhoneNumber": "9944351601"
+  },
+  "bloodGroup": "A1+",
+  "bankDetails": {
+    "bankName": "SBI",
+    "bankAccountNumber": 123456789123456789,
+    "IFSC_Code": "SBIN0001234",
+    "gpay": "7305504500",
+    "phonepay": "7305504500",
+    "upiId": "7305504500@upi"
+  },
+  "salary": 8000
+}
