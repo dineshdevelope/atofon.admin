@@ -12,7 +12,11 @@ app.use(cors());
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:5173", "https://atofon-admin.onrender.com"],
+    origin: [
+      "http://localhost:5173",
+      "https://atofon-admin.onrender.com",
+      "https://atofon.vercel.app/",
+    ],
   })
 );
 app.use(express.json());
