@@ -92,8 +92,8 @@ const SingleEmployeeDetail = () => {
               </p>
             </div>
           </div> */}
-          <div className="flex justify-between items-center mb-6">
-            <div className="flex items-center gap-4 mb-6">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
               <img
                 src={
                   employee.profilePicture || "https://via.placeholder.com/100"
@@ -116,15 +116,14 @@ const SingleEmployeeDetail = () => {
                 </p>
               </div>
             </div>
-            <div className="flex justify-end gap-4">
+
+            <div className="flex gap-2 mt-4 md:mt-0">
               <button className="text-black-600 text-sm bg-gray-300 hover:bg-gray-400 transition duration-300 px-4 py-2 rounded-lg font-small">
                 Edit
               </button>
               <button
                 className="text-black-600 text-sm bg-red-400 hover:bg-red-500 transition duration-300 px-4 py-2 rounded-lg font-small"
-                onClick={() => {
-                  handleDelete(employee._id);
-                }}
+                onClick={() => handleDelete(employee._id)}
               >
                 Delete
               </button>
@@ -132,8 +131,24 @@ const SingleEmployeeDetail = () => {
           </div>
 
           <div className="text-sm text-gray-700 space-y-2 mb-6">
-            <p>Email: {employee.email}</p>
-            <p>Phone: {employee.phoneNumber}</p>
+            <p>
+              Email:{" "}
+              <a
+                href={`mailto:${employee.email}`}
+                className="text-blue-600 hover:underline"
+              >
+                {employee.email}
+              </a>
+            </p>
+            <p>
+              Phone:{" "}
+              <a
+                href={`tel:${employee.phoneNumber}`}
+                className="text-blue-600 hover:underline"
+              >
+                {employee.phoneNumber}
+              </a>
+            </p>
             <p>Age: {employee.age}</p>
             <p>Qualification: {employee.qualification}</p>
             <p>Skills: {employee.skills}</p>
@@ -163,7 +178,15 @@ const SingleEmployeeDetail = () => {
                 {employee.emergencyContact?.name} (
                 {employee.emergencyContact?.relationship})
               </p>
-              <p>Phone: {employee.emergencyContact?.phoneNumber}</p>
+              <p>
+                Phone:{" "}
+                <a
+                  href={`tel:${employee.emergencyContact?.phoneNumber}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  {employee.emergencyContact?.phoneNumber}
+                </a>
+              </p>
             </div>
 
             <div>

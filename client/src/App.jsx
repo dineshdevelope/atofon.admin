@@ -4,6 +4,7 @@ import EmployeeForm from "./pages/EmployeeForm";
 import EmployeeCards from "./components/EmployeeCards";
 import SingleEmployeeDetail from "./pages/SingleEmployeeDetail";
 import { Routes, Route } from "react-router-dom";
+
 //import LoginPage from "./pages/LoginPage";
 function App() {
   return (

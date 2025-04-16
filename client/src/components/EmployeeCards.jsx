@@ -90,8 +90,15 @@ const EmployeeCards = () => {
                         </h2>
                         <p className="text-sm text-gray-600">Age: {emp.age}</p>
                         <p className="text-sm text-gray-600">
-                          Phone: {emp.phoneNumber}
+                          Phone:{" "}
+                          <a
+                            href={`tel:${emp.phoneNumber}`}
+                            className="text-blue-600 hover:underline"
+                          >
+                            {emp.phoneNumber}
+                          </a>
                         </p>
+
                         <p className="text-sm text-gray-600">
                           {emp.address?.area}, {emp.address?.district}
                         </p>
