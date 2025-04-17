@@ -3,9 +3,9 @@ import { ToastContainer } from "react-toastify";
 import EmployeeForm from "./pages/EmployeeForm";
 import EmployeeCards from "./components/EmployeeCards";
 import SingleEmployeeDetail from "./pages/SingleEmployeeDetail";
+import EmployeeEditForm from "./pages/EmployeeEditForm"; // Add this import
 import { Routes, Route } from "react-router-dom";
 
-//import LoginPage from "./pages/LoginPage";
 function App() {
   return (
     <>
@@ -14,6 +14,8 @@ function App() {
         <Route path="/" element={<EmployeeCards />} />
         <Route path="/employee/:id" element={<SingleEmployeeDetail />} />
         <Route path="/employee/new" element={<EmployeeForm />} />
+        <Route path="/employee/edit/:id" element={<EmployeeEditForm />} />{" "}
+        {/* Add this route */}
       </Routes>
     </>
   );

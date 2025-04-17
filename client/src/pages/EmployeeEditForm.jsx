@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const EmployeeForm = () => {
+const EmployeeEditForm = () => {
+  const { id } = useParams();
   const apiUrl = import.meta.env.VITE_BASE_URL;
   const cloudinaryName = import.meta.env.VITE_API_CLOUDNAME;
   const navigate = useNavigate();
 
   const [uploading, setUploading] = useState(false);
   const [profileFile, setProfileFile] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
@@ -153,6 +155,23 @@ const EmployeeForm = () => {
     return isValid;
   };
 
+  // Fetch employee data when component mounts
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/api/employee/${id}`);
+        setFormData(response.data.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching employee:", error);
+        toast.error("Failed to load employee data");
+        navigate("/");
+      }
+    };
+
+    fetchEmployee();
+  }, [id, apiUrl, navigate]);
+
   const uploadFileToCloudinary = async (file) => {
     const data = new FormData();
     data.append("file", file);
@@ -217,33 +236,45 @@ const EmployeeForm = () => {
     }
 
     try {
-      let uploadedProfileUrl = "";
+      let updatedData = { ...formData };
+
       if (profileFile) {
-        uploadedProfileUrl = await uploadFileToCloudinary(profileFile);
+        const uploadedProfileUrl = await uploadFileToCloudinary(profileFile);
+        updatedData = {
+          ...updatedData,
+          profilePicture: uploadedProfileUrl,
+        };
       }
 
-      const updatedData = {
-        ...formData,
-        profilePicture: uploadedProfileUrl,
-      };
+      const response = await axios.put(
+        `${apiUrl}/api/employee/${id}`,
+        updatedData
+      );
 
-      const response = await axios.post(`${apiUrl}/api/employee`, updatedData);
       console.log("Success:", response.data);
       setUploading(false);
-      toast.success("Employee created successfully!");
-      navigate("/");
+      toast.success("Employee updated successfully!");
+      navigate(`/employee/${id}`);
     } catch (error) {
-      console.error("Submit error", error.response?.data || error.message);
-      toast.error("Failed to create employee. Please try again.");
+      console.error("Update error", error.response?.data || error.message);
+      toast.error("Failed to update employee. Please try again.");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-xl font-semibold">Loading employee data...</div>
+      </div>
+    );
+  }
 
   return (
     <form
       onSubmit={handleSubmit}
       className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg space-y-6"
     >
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Employee Form</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">Edit Employee</h2>
 
       {/* Basic Info */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -479,20 +510,37 @@ const EmployeeForm = () => {
           onChange={handleChange}
           className="w-full"
         />
+        {formData.profilePicture && (
+          <div className="mt-2">
+            <p className="text-sm text-gray-600">Current Image:</p>
+            <img
+              src={formData.profilePicture}
+              alt="Current Profile"
+              className="w-20 h-20 object-cover rounded mt-1"
+            />
+          </div>
+        )}
       </div>
 
       {/* Submit */}
-      <div className="text-center">
+      <div className="flex justify-between">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-6 rounded-lg"
+        >
+          Cancel
+        </button>
         <button
           type="submit"
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg"
           disabled={uploading}
         >
-          {uploading ? "Please Wait..." : "Create Employee"}
+          {uploading ? "Updating..." : "Update Employee"}
         </button>
       </div>
     </form>
   );
 };
 
-export default EmployeeForm;
+export default EmployeeEditForm;
