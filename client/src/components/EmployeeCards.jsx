@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const EmployeeCards = () => {
@@ -58,6 +59,12 @@ const EmployeeCards = () => {
                 Total Employees:{" "}
                 <span className="font-semibold">{employees.length}</span>
               </p>
+              <Link
+                to={"/systems"}
+                className="text-black-600 text-sm bg-gray-300 hover:bg-gray-400 transition duration-300 px-4 py-2 rounded-lg font-small"
+              >
+                System Details
+              </Link>
             </div>
             {/*  <p className="text-right text-gray-600 text-sm mb-4">
               Total Employees:{" "}

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./DB/connectDB.js";
 import employeeRoute from "./routes/employee.route.js";
+import systemRoutes from "./routes/system.route.js";
 
 const app = express();
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/employee", employeeRoute);
+app.use("/api/systems", systemRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to atofon server!");

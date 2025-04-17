@@ -1,10 +1,11 @@
 import "./App.css";
 import { ToastContainer } from "react-toastify";
-import EmployeeForm from "./pages/EmployeeForm";
+import { Routes, Route } from "react-router-dom";
 import EmployeeCards from "./components/EmployeeCards";
 import SingleEmployeeDetail from "./pages/SingleEmployeeDetail";
-import EmployeeEditForm from "./pages/EmployeeEditForm"; // Add this import
-import { Routes, Route } from "react-router-dom";
+import EmployeeForm from "./pages/EmployeeForm";
+import EmployeeEditForm from "./pages/EmployeeEditForm";
+import SystemList from "./pages/SystemList";
 
 function App() {
   return (
@@ -12,10 +13,10 @@ function App() {
       <ToastContainer limit={1} />
       <Routes>
         <Route path="/" element={<EmployeeCards />} />
+        <Route path="/systems" element={<SystemList />} />
         <Route path="/employee/:id" element={<SingleEmployeeDetail />} />
         <Route path="/employee/new" element={<EmployeeForm />} />
-        <Route path="/employee/edit/:id" element={<EmployeeEditForm />} />{" "}
-        {/* Add this route */}
+        <Route path="/employee/edit/:id" element={<EmployeeEditForm />} />
       </Routes>
     </>
   );
