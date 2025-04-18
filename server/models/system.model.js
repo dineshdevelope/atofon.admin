@@ -20,6 +20,8 @@ const systemSchema = new Schema(
     monitor: { type: String },
     keyboard: { type: String },
     mouse: { type: String },
+    password: { type: String },
+    wifi_Dongle: { type: String },
 
     serialNo: {
       processer: { type: String },

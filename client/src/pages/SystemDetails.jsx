@@ -11,6 +11,7 @@ const SystemDetails = ({ system, onEdit, onDelete }) => {
           </h3>
           <DetailItem label="System Number" value={system.systemNumber} />
           <DetailItem label="System Name" value={system.systemName || "-"} />
+          <DetailItem label="System Password" value={system.password || "-"} />
           <DetailItem
             label="Status"
             value={system.isActive ? "Active" : "Inactive"}
@@ -76,6 +77,7 @@ const SystemDetails = ({ system, onEdit, onDelete }) => {
           <DetailItem label="Monitor" value={system.monitor || "-"} />
           <DetailItem label="Keyboard" value={system.keyboard || "-"} />
           <DetailItem label="Mouse" value={system.mouse || "-"} />
+          <DetailItem label="Wifi_Dongle" value={system.wifi_Dongle || "-"} />
         </div>
       </div>
 

@@ -38,7 +38,9 @@ const SystemList = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this system?")) {
       try {
-        await axios.delete(`/api/systems/${id}`);
+        await axios.delete(
+          `${import.meta.env.VITE_BASE_URL}/api/systems/${id}`
+        );
         // Update UI immediately by filtering out the deleted system
         setSystems((prevSystems) =>
           prevSystems.filter((sys) => sys._id !== id)
@@ -305,6 +307,7 @@ const SystemList = () => {
               <SystemForm
                 system={currentSystem}
                 onSuccess={handleFormSuccess}
+                handleFormClose={handleFormClose}
               />
             </div>
           </div>

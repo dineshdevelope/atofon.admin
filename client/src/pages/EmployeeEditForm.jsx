@@ -251,295 +251,416 @@ const EmployeeEditForm = () => {
         updatedData
       );
 
-      console.log("Success:", response.data);
-      setUploading(false);
       toast.success("Employee updated successfully!");
       navigate(`/employee/${id}`);
     } catch (error) {
       console.error("Update error", error.response?.data || error.message);
-      toast.error("Failed to update employee. Please try again.");
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to update employee. Please try again."
+      );
+    } finally {
+      setUploading(false);
     }
   };
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="text-xl font-semibold">Loading employee data...</div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
+  // Section component for better organization
+  const FormSection = ({ title, children }) => (
+    <div className="bg-gray-50 p-4 sm:p-6 rounded-lg shadow-sm mb-6">
+      <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">
+        {title}
+      </h3>
+      <div className="space-y-4">{children}</div>
+    </div>
+  );
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg space-y-6"
-    >
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Edit Employee</h2>
+    <div className="min-h-screen bg-gray-100 py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white shadow rounded-lg overflow-hidden">
+          <div className="p-6 sm:p-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+              Edit Employee
+            </h2>
 
-      {/* Basic Info */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {[
-          { field: "name", label: "Name *", type: "text" },
-          { field: "uniqueId", label: "Unique ID *", type: "text" },
-          { field: "age", label: "Age * (18-60)", type: "number" },
-          { field: "email", label: "Email *", type: "email" },
-          { field: "qualification", label: "Qualification *", type: "text" },
-          { field: "role", label: "Role *", type: "text" },
-          { field: "department", label: "Department *", type: "text" },
-          { field: "phoneNumber", label: "Phone Number *", type: "tel" },
-          {
-            field: "alternatePhoneNumber",
-            label: "Alternate Phone",
-            type: "tel",
-          },
-          { field: "salary", label: "Salary *", type: "number" },
-          { field: "bloodGroup", label: "Blood Group", type: "text" },
-        ].map(({ field, label, type }) => (
-          <div key={field}>
-            <label className="block text-gray-700 font-medium mb-1">
-              {label}
-            </label>
-            <input
-              type={type}
-              name={field}
-              value={formData[field]}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className={`w-full border ${
-                errors[field] ? "border-red-500" : "border-gray-300"
-              } rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500`}
-              min={field === "age" ? 18 : undefined}
-              max={field === "age" ? 60 : undefined}
-              maxLength={field.includes("phone") ? 10 : undefined}
-            />
-            {errors[field] && (
-              <p className="text-red-500 text-sm mt-1">{errors[field]}</p>
-            )}
-          </div>
-        ))}
-        <div>
-          <label className="block text-gray-700 font-medium mb-1">
-            Joining Date *
-          </label>
-          <input
-            type="date"
-            name="joiningDate"
-            value={formData.joiningDate}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className={`w-full border ${
-              errors.joiningDate ? "border-red-500" : "border-gray-300"
-            } rounded-lg px-3 py-2`}
-          />
-          {errors.joiningDate && (
-            <p className="text-red-500 text-sm mt-1">{errors.joiningDate}</p>
-          )}
-        </div>
-      </div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Basic Information Section */}
+              <FormSection title="Basic Information">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    { field: "name", label: "Full Name *", type: "text" },
+                    { field: "uniqueId", label: "Employee ID *", type: "text" },
+                    { field: "age", label: "Age *", type: "number" },
+                    { field: "email", label: "Email *", type: "email" },
+                    {
+                      field: "phoneNumber",
+                      label: "Phone Number *",
+                      type: "tel",
+                    },
+                    {
+                      field: "alternatePhoneNumber",
+                      label: "Alternate Phone",
+                      type: "tel",
+                    },
+                    { field: "bloodGroup", label: "Blood Group", type: "text" },
+                  ].map(({ field, label, type }) => (
+                    <div key={field}>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {label}
+                      </label>
+                      <input
+                        type={type}
+                        name={field}
+                        value={formData[field]}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`w-full px-3 py-2 border ${
+                          errors[field] ? "border-red-500" : "border-gray-300"
+                        } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                        min={field === "age" ? 18 : undefined}
+                        max={field === "age" ? 60 : undefined}
+                        maxLength={field.includes("phone") ? 10 : undefined}
+                      />
+                      {errors[field] && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors[field]}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </FormSection>
 
-      {/* Booleans */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {[
-          { label: "Is Active", name: "isActive" },
-          { label: "Staying in Company Room", name: "isStayingCompanyRoom" },
-          { label: "Using Company System", name: "isUsingCompanySystem" },
-        ].map((item) => (
-          <div key={item.name} className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              name={item.name}
-              checked={formData[item.name]}
-              onChange={handleChange}
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            />
-            <label className="text-gray-700">{item.label}</label>
-          </div>
-        ))}
-      </div>
+              {/* Employment Details Section */}
+              <FormSection title="Employment Details">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    {
+                      field: "qualification",
+                      label: "Qualification *",
+                      type: "text",
+                    },
+                    { field: "role", label: "Role *", type: "text" },
+                    {
+                      field: "department",
+                      label: "Department *",
+                      type: "text",
+                    },
+                    { field: "salary", label: "Salary *", type: "number" },
+                    {
+                      field: "joiningDate",
+                      label: "Joining Date *",
+                      type: "date",
+                    },
+                    { field: "skills", label: "Skills", type: "text" },
+                  ].map(({ field, label, type }) => (
+                    <div key={field}>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {label}
+                      </label>
+                      {type === "date" ? (
+                        <input
+                          type={type}
+                          name={field}
+                          value={formData[field]}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={`w-full px-3 py-2 border ${
+                            errors[field] ? "border-red-500" : "border-gray-300"
+                          } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                        />
+                      ) : (
+                        <input
+                          type={type}
+                          name={field}
+                          value={formData[field]}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={`w-full px-3 py-2 border ${
+                            errors[field] ? "border-red-500" : "border-gray-300"
+                          } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                        />
+                      )}
+                      {errors[field] && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors[field]}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
 
-      {/* Conditional System Number */}
-      {formData.isUsingCompanySystem && (
-        <div>
-          <label className="block text-gray-700 font-medium mb-1">
-            System Number
-          </label>
-          <input
-            type="text"
-            name="systemNumber"
-            value={formData.systemNumber}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2"
-          />
-        </div>
-      )}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                  {[
+                    { label: "Active Employee", name: "isActive" },
+                    {
+                      label: "Staying in Company Room",
+                      name: "isStayingCompanyRoom",
+                    },
+                    {
+                      label: "Using Company System",
+                      name: "isUsingCompanySystem",
+                    },
+                  ].map((item) => (
+                    <div
+                      key={item.name}
+                      className="flex items-center space-x-2 p-2"
+                    >
+                      <input
+                        type="checkbox"
+                        name={item.name}
+                        checked={formData[item.name]}
+                        onChange={handleChange}
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <label className="text-sm text-gray-700">
+                        {item.label}
+                      </label>
+                    </div>
+                  ))}
+                </div>
 
-      {/* Address Section */}
-      <div>
-        <h3 className="font-semibold text-gray-700 mb-2">Address</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {["street", "district", "area", "landmark", "state", "pincode"].map(
-            (field) => (
-              <div key={field}>
-                <label className="block text-gray-700 mb-1 capitalize">
-                  {field} {field === "pincode" && "(6 digits)"}
-                </label>
-                <input
-                  type={field === "pincode" ? "number" : "text"}
-                  name={`address.${field}`}
-                  value={formData.address[field]}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={`w-full border ${
-                    errors[`address.${field}`]
-                      ? "border-red-500"
-                      : "border-gray-300"
-                  } rounded-lg px-3 py-2`}
-                  maxLength={field === "pincode" ? 6 : undefined}
-                />
-                {errors[`address.${field}`] && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors[`address.${field}`]}
-                  </p>
+                {formData.isUsingCompanySystem && (
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      System Number
+                    </label>
+                    <input
+                      type="text"
+                      name="systemNumber"
+                      value={formData.systemNumber}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
                 )}
+              </FormSection>
+
+              {/* Address Section */}
+              <FormSection title="Address Information">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    { field: "street", label: "Street", type: "text" },
+                    { field: "landmark", label: "Landmark", type: "text" },
+                    { field: "area", label: "Area", type: "text" },
+                    { field: "district", label: "District", type: "text" },
+                    { field: "state", label: "State", type: "text" },
+                    { field: "pincode", label: "Pincode", type: "text" },
+                  ].map(({ field, label, type }) => (
+                    <div key={field}>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {label}
+                      </label>
+                      <input
+                        type={type}
+                        name={`address.${field}`}
+                        value={formData.address[field]}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`w-full px-3 py-2 border ${
+                          errors[`address.${field}`]
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                        maxLength={field === "pincode" ? 6 : undefined}
+                      />
+                      {errors[`address.${field}`] && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors[`address.${field}`]}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </FormSection>
+
+              {/* Emergency Contact Section */}
+              <FormSection title="Emergency Contact">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    { field: "name", label: "Name *", type: "text" },
+                    {
+                      field: "relationship",
+                      label: "Relationship *",
+                      type: "text",
+                    },
+                    {
+                      field: "phoneNumber",
+                      label: "Phone Number *",
+                      type: "tel",
+                    },
+                    {
+                      field: "alternatePhoneNumber",
+                      label: "Alternate Phone",
+                      type: "tel",
+                    },
+                  ].map(({ field, label, type }) => (
+                    <div key={field}>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {label}
+                      </label>
+                      <input
+                        type={type}
+                        name={`emergencyContact.${field}`}
+                        value={formData.emergencyContact[field]}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`w-full px-3 py-2 border ${
+                          errors[`emergencyContact.${field}`]
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                        maxLength={field.includes("phone") ? 10 : undefined}
+                      />
+                      {errors[`emergencyContact.${field}`] && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors[`emergencyContact.${field}`]}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </FormSection>
+
+              {/* Bank Details Section */}
+              <FormSection title="Bank Details">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    { field: "bankName", label: "Bank Name", type: "text" },
+                    {
+                      field: "bankAccountNumber",
+                      label: "Account Number",
+                      type: "text",
+                    },
+                    {
+                      field: "IFSC_Code",
+                      label: "IFSC Code",
+                      type: "text",
+                    },
+                    { field: "gpay", label: "GPay Number", type: "tel" },
+                    { field: "phonepay", label: "PhonePe Number", type: "tel" },
+                    { field: "upiId", label: "UPI ID", type: "text" },
+                  ].map(({ field, label, type }) => (
+                    <div key={field}>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {label}
+                      </label>
+                      <input
+                        type={type}
+                        name={`bankDetails.${field}`}
+                        value={formData.bankDetails[field]}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`w-full px-3 py-2 border ${
+                          errors[`bankDetails.${field}`]
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                        maxLength={field === "IFSC_Code" ? 11 : undefined}
+                      />
+                      {errors[`bankDetails.${field}`] && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors[`bankDetails.${field}`]}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </FormSection>
+
+              {/* Profile Picture Section */}
+              <FormSection title="Profile Picture">
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Upload New Profile Photo
+                    </label>
+                    <div className="mt-1 flex items-center">
+                      <input
+                        type="file"
+                        name="profilePicture"
+                        accept="image/*"
+                        onChange={handleChange}
+                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      />
+                    </div>
+                    {profileFile && (
+                      <p className="mt-2 text-sm text-gray-600">
+                        Selected file: {profileFile.name}
+                      </p>
+                    )}
+                  </div>
+                  {formData.profilePicture && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-700 mb-1">
+                        Current Profile Picture
+                      </p>
+                      <img
+                        src={formData.profilePicture}
+                        alt="Current Profile"
+                        className="w-24 h-24 object-cover rounded-full border-2 border-gray-300"
+                      />
+                    </div>
+                  )}
+                </div>
+              </FormSection>
+
+              {/* Form Actions */}
+              <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
+                <button
+                  type="button"
+                  onClick={() => navigate(-1)}
+                  className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={uploading}
+                  className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {uploading ? (
+                    <>
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Updating...
+                    </>
+                  ) : (
+                    "Update Employee"
+                  )}
+                </button>
               </div>
-            )
-          )}
-        </div>
-      </div>
-
-      {/* Emergency Contact */}
-      <div>
-        <h3 className="font-semibold text-gray-700 mb-2">Emergency Contact</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {["name", "relationship", "phoneNumber", "alternatePhoneNumber"].map(
-            (field) => (
-              <div key={field}>
-                <label className="block text-gray-700 mb-1 capitalize">
-                  {field} {field.includes("phone") && "(10 digits)"}
-                </label>
-                <input
-                  type={field.includes("phone") ? "tel" : "text"}
-                  name={`emergencyContact.${field}`}
-                  value={formData.emergencyContact[field]}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={`w-full border ${
-                    errors[`emergencyContact.${field}`]
-                      ? "border-red-500"
-                      : "border-gray-300"
-                  } rounded-lg px-3 py-2`}
-                  maxLength={field.includes("phone") ? 10 : undefined}
-                />
-                {errors[`emergencyContact.${field}`] && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors[`emergencyContact.${field}`]}
-                  </p>
-                )}
-              </div>
-            )
-          )}
-        </div>
-      </div>
-
-      {/* Skills */}
-      <div>
-        <label className="block text-gray-700 font-medium mb-1">Skills</label>
-        <input
-          type="text"
-          name="skills"
-          value={formData.skills}
-          onChange={handleChange}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2"
-        />
-      </div>
-
-      {/* Bank Details */}
-      <div>
-        <h3 className="font-semibold text-gray-700 mb-2">Bank Details</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[
-            { field: "bankName", label: "Bank Name", type: "text" },
-            {
-              field: "bankAccountNumber",
-              label: "Account Number (9-18 digits)",
-              type: "text",
-            },
-            {
-              field: "IFSC_Code",
-              label: "IFSC Code (e.g., ABCD0123456)",
-              type: "text",
-            },
-            { field: "gpay", label: "GPay Number", type: "tel" },
-            { field: "phonepay", label: "PhonePe Number", type: "tel" },
-            { field: "upiId", label: "UPI ID", type: "text" },
-          ].map(({ field, label, type }) => (
-            <div key={field}>
-              <label className="block text-gray-700 mb-1">{label}</label>
-              <input
-                type={type}
-                name={`bankDetails.${field}`}
-                value={formData.bankDetails[field]}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className={`w-full border ${
-                  errors[`bankDetails.${field}`]
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } rounded-lg px-3 py-2`}
-                maxLength={field === "IFSC_Code" ? 11 : undefined}
-              />
-              {errors[`bankDetails.${field}`] && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors[`bankDetails.${field}`]}
-                </p>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Profile Picture Upload */}
-      <div>
-        <label className="block text-gray-700 font-medium mb-1">
-          Profile Picture
-        </label>
-        <input
-          type="file"
-          name="profilePicture"
-          accept="image/*"
-          onChange={handleChange}
-          className="w-full"
-        />
-        {formData.profilePicture && (
-          <div className="mt-2">
-            <p className="text-sm text-gray-600">Current Image:</p>
-            <img
-              src={formData.profilePicture}
-              alt="Current Profile"
-              className="w-20 h-20 object-cover rounded mt-1"
-            />
+            </form>
           </div>
-        )}
+        </div>
       </div>
-
-      {/* Submit */}
-      <div className="flex justify-between">
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-6 rounded-lg"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg"
-          disabled={uploading}
-        >
-          {uploading ? "Updating..." : "Update Employee"}
-        </button>
-      </div>
-    </form>
+    </div>
   );
 };
 

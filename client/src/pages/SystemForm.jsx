@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const SystemForm = ({ system, onSuccess }) => {
+const SystemForm = ({ system, onSuccess, handleFormClose }) => {
   const [formData, setFormData] = useState({
     systemName: "",
     systemNumber: "",
@@ -57,6 +57,8 @@ const SystemForm = ({ system, onSuccess }) => {
         monitor: system.monitor || "",
         keyboard: system.keyboard || "",
         mouse: system.mouse || "",
+        password: system.password || "",
+        wifi_Dongle: system.wifi_Dongle || "",
         serialNo: {
           processer: system.serialNo?.processer || "",
           motherboard: system.serialNo?.motherboard || "",
@@ -87,6 +89,8 @@ const SystemForm = ({ system, onSuccess }) => {
         monitor: "",
         keyboard: "",
         mouse: "",
+        password: "",
+        wifi_Dongle: "",
         serialNo: {
           processer: "",
           motherboard: "",
@@ -205,7 +209,20 @@ const SystemForm = ({ system, onSuccess }) => {
             />
           </div>
 
-          <div className="flex items-center">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              System Password
+            </label>
+            <input
+              type="text"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-md px-3 py-2"
+            />
+          </div>
+
+          <div className="flex items-center sm:mt-10">
             <input
               type="checkbox"
               name="isActive"
@@ -435,6 +452,18 @@ const SystemForm = ({ system, onSuccess }) => {
               className="w-full border border-gray-300 rounded-md px-3 py-2"
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              WiFi Dongle
+            </label>
+            <input
+              type="text"
+              name="wifi_Dongle"
+              value={formData.wifi_Dongle}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-md px-3 py-2"
+            />
+          </div>
         </div>
       </div>
 
@@ -540,7 +569,7 @@ const SystemForm = ({ system, onSuccess }) => {
       <div className="flex justify-end space-x-3 pt-4">
         <button
           type="button"
-          onClick={() => onSuccess()}
+          onClick={() => handleFormClose()}
           className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
         >
           Cancel
