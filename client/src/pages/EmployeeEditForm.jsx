@@ -3,6 +3,16 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
+// Moved FormSection outside the main component
+const FormSection = ({ title, children }) => (
+  <div className="bg-gray-50 p-4 sm:p-6 rounded-lg shadow-sm mb-6">
+    <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">
+      {title}
+    </h3>
+    <div className="space-y-4">{children}</div>
+  </div>
+);
+
 const EmployeeEditForm = () => {
   const { id } = useParams();
   const apiUrl = import.meta.env.VITE_BASE_URL;
@@ -272,16 +282,6 @@ const EmployeeEditForm = () => {
     );
   }
 
-  // Section component for better organization
-  const FormSection = ({ title, children }) => (
-    <div className="bg-gray-50 p-4 sm:p-6 rounded-lg shadow-sm mb-6">
-      <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">
-        {title}
-      </h3>
-      <div className="space-y-4">{children}</div>
-    </div>
-  );
-
   return (
     <div className="min-h-screen bg-gray-100 py-6 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
@@ -366,29 +366,16 @@ const EmployeeEditForm = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         {label}
                       </label>
-                      {type === "date" ? (
-                        <input
-                          type={type}
-                          name={field}
-                          value={formData[field]}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={`w-full px-3 py-2 border ${
-                            errors[field] ? "border-red-500" : "border-gray-300"
-                          } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                        />
-                      ) : (
-                        <input
-                          type={type}
-                          name={field}
-                          value={formData[field]}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={`w-full px-3 py-2 border ${
-                            errors[field] ? "border-red-500" : "border-gray-300"
-                          } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                        />
-                      )}
+                      <input
+                        type={type}
+                        name={field}
+                        value={formData[field]}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`w-full px-3 py-2 border ${
+                          errors[field] ? "border-red-500" : "border-gray-300"
+                        } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                      />
                       {errors[field] && (
                         <p className="mt-1 text-sm text-red-600">
                           {errors[field]}
