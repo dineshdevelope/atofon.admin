@@ -9,6 +9,8 @@ const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
+connectDB();
+
 app.use(cors());
 app.use(
   cors({
@@ -29,8 +31,6 @@ app.use("/api/systems", systemRoutes);
 app.get("/", (req, res) => {
   res.send("Welcome to atofon server!");
 });
-
-connectDB();
 
 app.listen(PORT, () => {
   console.log(`Server is running on port http://localhost:${PORT}`);
